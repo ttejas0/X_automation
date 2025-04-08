@@ -11,7 +11,7 @@ export const generateTweets = async (req, res) => {
 
     const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
     const response = await ai.models.generateContent({
-      model: "gemini-2.0-flash",
+      model: "gemini-2.5-pro-exp-03-25",
       contents: prompt,
     });
 
