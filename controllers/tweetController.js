@@ -1,31 +1,48 @@
-import { GoogleGenAI } from "@google/genai";
+import { modleResponse } from "../services/geminiModel.js";
+import { tweetPrompt } from "../services/prompts.js";
 
 export const generateTweets = async (req, res) => {
   try {
-    const { prompt } = req.body; // Get prompt from request body
+    const { number, researchData } = req.body;
     console.log("Received request:", req.body);
 
-    if (!prompt) {
-      return res.status(400).json({ error: "Prompt is required" });
+    if (!number || !researchData) {
+      return res
+        .status(400)
+        .json({ error: "Both number and researchData are required" });
     }
 
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-pro-exp-03-25",
-      contents: prompt,
-    });
+    const prompt = tweetPrompt(number, researchData);
+    const responseText = await modleResponse(prompt); // use the corrected function name
 
-    res.send({
+    // Parse LLM output from string to JSON
+    let tweets;
+    try {
+      const formatText = responseText.replace(/```json|```/g, "").trim();
+      tweets = JSON.parse(formatText);
+    } catch (parseError) {
+      console.error("Failed to parse LLM response as JSON:", responseText);
+      return res.status(500).json({
+        error: "LLM response was not valid JSON",
+        details: parseError.message,
+        raw: responseText,
+      });
+    }
+
+    res.status(200).json({
       success: true,
-      response: response.text, // send the text of the response
+      message: "Tweets generated",
+      tweets,
     });
   } catch (error) {
     console.error("Error:", error);
-    res
-      .status(500)
-      .json({ error: "Failed to generate response", details: error.message });
+    res.status(500).json({
+      error: "Failed to generate tweets",
+      details: error.message,
+    });
   }
 };
+
 export const uploadTweets = (req, res) => {
   res.send("Upload tweets");
 };
