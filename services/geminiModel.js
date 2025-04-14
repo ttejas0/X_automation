@@ -1,9 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 
-export async function modleResponse(prompt) {
+export async function thinkingModleResponse(prompt) {
   const ai = new GoogleGenAI({ apiKey: process.env.GOOGLE_API_KEY });
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: "gemini-2.5-pro-exp-03-25",
     contents: prompt,
   });
   const responseText = response.text;
