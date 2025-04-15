@@ -9,23 +9,16 @@ export async function evaluationAndRegeneration(
 ) {
   const { overall_average_ratings } = evaluatedTweets;
   const {
-    "Grammatical Accuracy": grammaticalAccuracy,
     Readability: readability,
     "Engagement Potential": engagementPotential,
     "Quality & Insight": qualityInsight,
-    "Factual Accuracy": factualAccuracy,
   } = overall_average_ratings;
 
-  if (
-    grammaticalAccuracy < 9 ||
-    readability < 9 ||
-    engagementPotential < 9 ||
-    qualityInsight < 9 ||
-    factualAccuracy < 9
-  ) {
+  if (readability < 8 || engagementPotential < 8 || qualityInsight < 8) {
     // Regenerate tweets
     const prompt = evaluationBasedRegenerationPrompt(
       evaluatedTweets,
+      tweets,
       researchData
     );
     const regeneratedTweets = await thinkingModleResponse(prompt);
