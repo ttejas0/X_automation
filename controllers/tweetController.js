@@ -34,12 +34,20 @@ export const generateTweets = async (req, res) => {
       tweets
     );
 
+    // const evaluateFinalTweetsReasponse = await thinkingModleResponse(
+    //   tweetEvaluationPrompt(finalTweets, researchData)
+    // );
+    // const finalEvaluatedTweets = await parseLLMOutput(
+    //   evaluateFinalTweetsReasponse
+    // );
+
     res.status(200).json({
       success: true,
       message: "Tweets generated",
       tweets,
       evaluatedTweets,
       finalTweets,
+      finalEvaluatedTweets,
     });
   } catch (error) {
     console.error("Error:", error);
