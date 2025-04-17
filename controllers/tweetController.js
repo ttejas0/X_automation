@@ -5,6 +5,7 @@ import {
 } from "../services/functions/prompts.js";
 import { parseLLMOutput } from "../services/functions/parseLLM.js";
 import { evaluationAndRegeneration } from "../services/functions/evaluationAndRegeneration.js";
+import { uploadToGoogleSheets } from "../services/googleSheets/uploadToGoogleSheets.js";
 
 export const generateTweets = async (req, res) => {
   try {
@@ -41,13 +42,15 @@ export const generateTweets = async (req, res) => {
     //   evaluateFinalTweetsReasponse
     // );
 
+    await uploadToGoogleSheets(finalTweets);
+
     res.status(200).json({
       success: true,
       message: "Tweets generated",
       tweets,
       evaluatedTweets,
       finalTweets,
-      finalEvaluatedTweets,
+      // finalEvaluatedTweets,
     });
   } catch (error) {
     console.error("Error:", error);
