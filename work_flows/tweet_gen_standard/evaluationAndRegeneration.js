@@ -1,6 +1,6 @@
-import { thinkingModleResponse } from "../geminiModel.js";
-import { evaluationBasedRegenerationPrompt } from "./prompts.js";
+import { evaluationBasedRegenerationPrompt } from "../../prompts/standardPrompts.js";
 import { parseLLMOutput } from "./parseLLM.js";
+import { thinkingModleResponse } from "../../services/aiModels/geminiModel.js";
 
 export async function evaluationAndRegeneration(
   researchData,

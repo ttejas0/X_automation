@@ -1,12 +1,12 @@
-import { thinkingModleResponse } from "../services/geminiModel.js";
 import {
   tweetEvaluationPrompt,
   tweetPrompt,
-} from "../services/functions/prompts.js";
-import { parseLLMOutput } from "../services/functions/parseLLM.js";
-import { evaluationAndRegeneration } from "../services/functions/evaluationAndRegeneration.js";
+} from "../prompts/standardPrompts.js";
+import { parseLLMOutput } from "../work_flows/tweet_gen_standard/parseLLM.js";
+import { evaluationAndRegeneration } from "../work_flows/tweet_gen_standard/evaluationAndRegeneration.js";
 import { uploadToGoogleSheets } from "../services/googleSheets/uploadToGoogleSheets.js";
 import { TwitterApi } from "twitter-api-v2";
+import { thinkingModleResponse } from "../services/aiModels/geminiModel.js";
 
 export const generateTweets = async (req, res) => {
   try {
