@@ -6,7 +6,7 @@ import {
 
 const router = express.Router();
 
-router.post("/generate", generateTweets);
-router.post("/upload", uploadTweets);
+router.post("standard/generate", generateTweets);
+router.post("standard/upload", uploadTweets);
 
 export default router;
