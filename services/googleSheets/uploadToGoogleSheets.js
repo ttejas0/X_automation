@@ -13,7 +13,7 @@ function getRandomTimeBetween7AMand11PM() {
 
 export async function uploadToGoogleSheets(tweetData) {
   const spreadSheetId = process.env.GOOGLE_SPREADSHEET_ID;
-  const credentials = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+  const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS);
   try {
     if (!spreadSheetId) {
       console.error("Error: GOOGLE_SPREADSHEET_ID is not defined");
@@ -21,7 +21,7 @@ export async function uploadToGoogleSheets(tweetData) {
     }
 
     const auth = new google.auth.GoogleAuth({
-      keyFile: credentials,
+      credentials,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 
