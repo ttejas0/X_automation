@@ -13,21 +13,24 @@ export const generateTweets = async (req, res) => {
     const { researchData } = req.body;
 
     if (!researchData) {
-      return res
-        .status(400)
-        .json({ error: "Both number and researchData are required" });
+      return res.status(400).json({ error: "researchData is required" });
     }
 
+    // Send an immediate response
+    res.status(202).json({
+      success: true,
+      message: "Tweet generation started in background",
+    });
+
+    // Continue processing in background
     const mainTweetResponseText = await thinkingModleResponse(
       tweetPrompt(researchData)
     );
-    // Parse LLM output from string to JSON
     const tweets = await parseLLMOutput(mainTweetResponseText);
 
     const evaluatedResponseText = await thinkingModleResponse(
       tweetEvaluationPrompt(tweets, researchData)
     );
-    // Parse LLM output from string to JSON
     const evaluatedTweets = await parseLLMOutput(evaluatedResponseText);
 
     const finalTweets = await evaluationAndRegeneration(
@@ -36,31 +39,14 @@ export const generateTweets = async (req, res) => {
       tweets
     );
 
-    // const evaluateFinalTweetsReasponse = await thinkingModleResponse(
-    //   tweetEvaluationPrompt(finalTweets, researchData)
-    // );
-    // const finalEvaluatedTweets = await parseLLMOutput(
-    //   evaluateFinalTweetsReasponse
-    // );
-
     await uploadToGoogleSheets(finalTweets);
 
-    res.status(200).json({
-      success: true,
-      message: "Tweets generated",
-      tweets,
-      evaluatedTweets,
-      finalTweets,
-      // finalEvaluatedTweets,
-    });
+    console.log("✅ Tweet pipeline completed and uploaded.");
   } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({
-      error: "Failed to generate tweets",
-      details: error.message,
-    });
+    console.error("❌ LLM Pipeline failed:", error.message);
   }
 };
+
 export const uploadTweets = async (req, res) => {
   // 1. Load credentials
 
