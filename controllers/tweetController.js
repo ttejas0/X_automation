@@ -16,34 +16,49 @@ export const generateTweets = async (req, res) => {
       return res.status(400).json({ error: "researchData is required" });
     }
 
-    // Send an immediate response
+    // Respond immediately to avoid timeouts
     res.status(202).json({
       success: true,
       message: "Tweet generation started in background",
     });
 
-    // Continue processing in background
-    const mainTweetResponseText = await thinkingModleResponse(
-      tweetPrompt(researchData)
-    );
-    const tweets = await parseLLMOutput(mainTweetResponseText);
+    // Run in background
+    setImmediate(async () => {
+      try {
+        console.log("🧠 Generating initial tweets...");
+        const mainTweetResponseText = await thinkingModleResponse(
+          tweetPrompt(researchData)
+        );
+        const tweets = await parseLLMOutput(mainTweetResponseText);
+        console.log("📤 Generated Tweets:", tweets);
 
-    const evaluatedResponseText = await thinkingModleResponse(
-      tweetEvaluationPrompt(tweets, researchData)
-    );
-    const evaluatedTweets = await parseLLMOutput(evaluatedResponseText);
+        console.log("🔍 Evaluating tweets...");
+        const evaluatedResponseText = await thinkingModleResponse(
+          tweetEvaluationPrompt(tweets, researchData)
+        );
+        const evaluatedTweets = await parseLLMOutput(evaluatedResponseText);
+        console.log("📊 Evaluated Tweets:", evaluatedTweets);
 
-    const finalTweets = await evaluationAndRegeneration(
-      researchData,
-      evaluatedTweets,
-      tweets
-    );
+        console.log("🔁 Refining tweets with evaluation...");
+        const finalTweets = await evaluationAndRegeneration(
+          researchData,
+          evaluatedTweets,
+          tweets
+        );
+        console.log("🎯 Final Refined Tweets:", finalTweets);
 
-    await uploadToGoogleSheets(finalTweets);
-
-    console.log("✅ Tweet pipeline completed and uploaded.");
+        await uploadToGoogleSheets(finalTweets);
+        console.log("✅ Tweets uploaded to Google Sheets");
+      } catch (innerErr) {
+        console.error("❌ Background process failed:", innerErr.message);
+      }
+    });
   } catch (error) {
-    console.error("❌ LLM Pipeline failed:", error.message);
+    console.error("❌ Request handler failed:", error.message);
+    res.status(500).json({
+      error: "Failed to start tweet generation",
+      details: error.message,
+    });
   }
 };
 
