@@ -8,9 +8,8 @@ const PORT = process.env.PORT || 3000;
 const app = express();
 
 app.use(express.json());
-
-app.get("/", (req, res) => res.send("Hello World!"));
-app.get("/health", (req, res) => res.send("OK"));
+// Health check
+app.get("/health", (req, res) => res.send("I am OK"));
 app.use("/api/tweets", tweetRoutes);
 
 app.listen(PORT, () => {
