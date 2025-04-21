@@ -11,7 +11,7 @@ import { uploadToX } from "../work_flows/tweet_gen_standard/uploadToX.js";
 
 export const generateTweets = async (req, res) => {
   try {
-    const { researchData } = req.body;
+    const { researchData, publishDate } = req.body;
 
     if (!researchData) {
       return res.status(400).json({ error: "researchData is required" });
@@ -48,7 +48,7 @@ export const generateTweets = async (req, res) => {
         );
         console.log("🎯 Final Refined Tweets:", finalTweets);
 
-        await uploadToGoogleSheets(finalTweets);
+        await uploadToGoogleSheets(finalTweets, publishDate);
         console.log("✅ Tweets uploaded to Google Sheets");
       } catch (innerErr) {
         console.error("❌ Background process failed:", innerErr.message);
