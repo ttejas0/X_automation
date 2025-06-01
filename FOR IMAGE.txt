@@ -1,0 +1,20 @@
+FOR IMAGE
+
+{
+  "text": "Google's commitment further underscores the AI investment trend. Alphabet confirmed its $75 billion spending plan for this year, much of which fuels the AI chip ecosystem.",
+  "mediaUrls": [
+   "https://images.unsplash.com/photo-1559989899-f0743fa80152?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+  ]
+}
+
+
+FOR GIF
+
+{
+  "text": "Amazon's spending plans really put the AI investment scale into perspective. They're earmarking around $100 billion for capital spending, significantly driven by AI needs.",
+  "mediaUrls": [
+   "https://media1.giphy.com/media/v1.Y2lkPTc5MGI3NjExbzBocW10OWtoNDJxbWpqN2sxeW9ocWU2ejdwMW1oYWJscDJsZHFtbyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/oNu863ZCcMcLvgHvFf/giphy.gif" 
+  ]
+}
+
+
